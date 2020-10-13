@@ -1,0 +1,22 @@
+.ext_sales_link {
+	display: inline-flex;
+	background-color: #ffdd40;
+	color: #000!important;
+	font-size: 12px;
+	font-family: Verdana, Arial, sans-serif;
+	height: 24px;
+	padding: 0 6px;
+	border-radius: 2px;
+	align-items: center;
+	margin-top: 3px;
+}
+
+.ext_sales_link > em {
+	font-weight: bold;
+	font-size: 14px;
+	margin-left: 3px;
+}
+
+.more-colors-available + .ext_sales_link {
+	margin-left: 5px;
+}

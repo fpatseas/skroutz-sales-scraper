@@ -1,0 +1,36 @@
+{
+	"name": "Skroutz.gr Product Sales Scraper",
+	"description": "Extracts and displays each product's sales count in the past 3 months.",
+	"version": "0.1",
+	"background": {
+		"scripts": [
+			"js/chrome/background.js"
+		],
+		"persistent": false
+	},
+	"manifest_version": 2,
+	"icons": {
+		"16": "images/icon-16.png",
+		"48": "images/icon-48.png",
+		"64": "images/icon-64.png",
+		"128": "images/icon.png"
+	},
+	"content_scripts":[
+		{
+			"matches":[ "https://www.skroutz.gr/*" ],
+			"js": [
+				"js/libs/jquery-3.5.1.min.js",
+				"js/content.js"
+			],
+			"css" : [ "css/content.css" ],
+			"run_at": "document_end"
+		}
+	],
+	"permissions": [
+		"*://*.skroutz.gr/*",
+		"activeTab",
+		"storage",
+		"webNavigation"
+	],
+	"web_accessible_resources": [ "images/*" ]
+}
