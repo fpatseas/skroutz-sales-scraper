@@ -1,1 +1,1 @@
-# skroutz-product-sales-scraper
+# Skroutz.gr Product Sales Scraper
