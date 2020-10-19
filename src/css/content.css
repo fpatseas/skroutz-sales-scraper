@@ -1,4 +1,4 @@
-.ext_sales_link {
+.ext__sales {
 	display: inline-flex;
 	background-color: #ffdd40;
 	color: #000!important;
@@ -11,12 +11,18 @@
 	margin-top: 3px;
 }
 
-.ext_sales_link > em {
+.ext__sales > em {
 	font-weight: bold;
 	font-size: 14px;
 	margin-left: 3px;
 }
 
-.more-colors-available + .ext_sales_link {
+.more-colors-available + .ext__sales {
 	margin-left: 5px;
+}
+
+.ext__sales__container--noheightlimit {
+	max-height: 100%!important;
+	height: auto!important;
+	display: block!important;
 }
