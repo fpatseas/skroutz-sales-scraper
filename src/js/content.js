@@ -40,21 +40,23 @@ $(() => {
 		},
 			
 		processSKUs() {
-			$('li[data-skuid],li[id^="sku_"]').map( ( i, elem ) => {
-				let $li = $(elem),
-					skuAttr = $li.attr('data-skuid'),
-					sku = (typeof skuAttr == 'undefined' ? $li.prop('id').replace('sku_', '') : skuAttr),
-					cacheKey = sku + '_' + SkroutzScraper.config.timestamp;
+			$('li[data-skuid],li[id^="sku_"]').map((i, elem) => {
+				if ($('.reviews-count', elem).length > 0) {
+					let $li = $(elem),
+						skuAttr = $li.attr('data-skuid'),
+						sku = (typeof skuAttr == 'undefined' ? $li.prop('id').replace('sku_', '') : skuAttr),
+						cacheKey = sku + '_' + SkroutzScraper.config.timestamp;
 
-				SkroutzScraper.storage.get(cacheKey, (cached) => {
-					if (cached && cached.sales) {
-						SkroutzScraper.displaySales(sku, cached.sales);
-					} else {
-						SkroutzScraper.extractSales(sku, SkroutzScraper.displaySales);
-					}
-				});
-				
-				return sku;
+					SkroutzScraper.storage.get(cacheKey, (cached) => {
+						if (cached && cached.sales) {
+							SkroutzScraper.displaySales(sku, cached.sales);
+						} else {
+							SkroutzScraper.extractSales(sku, SkroutzScraper.displaySales);
+						}
+					});
+
+					return sku;
+                }
 			});
 		},
 		
@@ -78,7 +80,8 @@ $(() => {
 			if(sales_container.length == 0) {
 				sales_container = $('p.specs', listItem);
 				
-				sales_container.addClass('ext__sales__container--noheightlimit');
+				sales_container.append('<br>')
+							.addClass('ext__sales__container--noheightlimit');
 			}
 			
 			if(sales_container.length == 0) {
