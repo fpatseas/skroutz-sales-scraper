@@ -1,14 +1,15 @@
 .ext__sales {
 	display: inline-flex;
 	background-color: #ffdd40;
-	color: #000!important;
-	font-size: 12px;
+	color: #000 !important;
 	font-family: Verdana, Arial, sans-serif;
-	height: 24px;
+	height: 22px;
 	padding: 0 6px;
 	border-radius: 2px;
 	align-items: center;
 	margin-top: 3px;
+	align-self: flex-end;
+	font-size: 11px;
 }
 
 .ext__sales > em {
@@ -18,11 +19,15 @@
 }
 
 .more-colors-available + .ext__sales {
-	margin-left: 5px;
+	margin-left: 16px;
 }
 
 .ext__sales__container--noheightlimit {
 	max-height: 100%!important;
 	height: auto!important;
 	display: block!important;
+}
+
+.ext__sales__container--pushsales .ext__sales {
+	margin-left: 16px;
 }
