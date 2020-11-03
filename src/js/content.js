@@ -7,7 +7,9 @@ $(() => {
 			skuReviewsURL: 'https://www.skroutz.gr/badge/sku_reviews?shop_code=SA-1830-0039&sku_id=',
 			firefox: typeof self !== 'undefined' && typeof self.port !== 'undefined',
 			timestamp: new Date().toLocaleDateString().replaceAll('/',''),
-			simpleStorage: {}
+			simpleStorage: {},
+			throttlingDelay: 500,
+			throttlingTimer: null
 		},
 		
 		init( settings ) {
@@ -17,7 +19,6 @@ $(() => {
 		},
 	 
 		setup() {
-			SkroutzScraper.processSKUs();
 			SkroutzScraper.registerEventHandlers();
 		},
 		
@@ -37,11 +38,15 @@ $(() => {
 					}
 				}, false);
 			}
+
+			$(window).on('load scroll', () => {
+				SkroutzScraper.throttle(SkroutzScraper.processSKUs, SkroutzScraper.throttlingDelay);
+			});
 		},
-			
+
 		processSKUs() {
-			$('li[data-skuid],li[id^="sku_"]').map((i, elem) => {
-				if ($('.reviews-count', elem).length > 0) {
+			$('li[data-skuid],li[id^="sku_"]').not('.ext__sales__visible').map((i, elem) => {
+				if ($('.reviews-count', elem).length > 0 && $(elem).inView('both')) {
 					let $li = $(elem),
 						skuAttr = $li.attr('data-skuid'),
 						sku = (typeof skuAttr == 'undefined' ? $li.prop('id').replace('sku_', '') : skuAttr),
@@ -55,7 +60,7 @@ $(() => {
 						}
 					});
 
-					return sku;
+					$li.addClass('ext__sales__visible');
                 }
 			});
 		},
@@ -77,12 +82,16 @@ $(() => {
 			let listItem = 'li[data-skuid="' + sku + '"],li[id="sku_'+ sku +'"]',
 				sales_container = $('.details', listItem);
 			
-			if(sales_container.length == 0) {
+			if (sales_container.length == 0) {
 				sales_container = $('p.specs', listItem);
-				
+
 				sales_container.append('<br>')
-							.addClass('ext__sales__container--noheightlimit');
+					.addClass('ext__sales__container--noheightlimit');
 			}
+			else
+			{
+				sales_container.addClass('ext__sales__container--pushsales');
+            }
 			
 			if(sales_container.length == 0) {
 				sales_container = $('div.specs', listItem);
@@ -110,7 +119,7 @@ $(() => {
 				let sales_container = SkroutzScraper.getSalesContainer(sku);
 
 				if(sales_container.find('.ext__sales').length == 0)
-					sales_container.append('<span class="ext__sales">πωλήσεις: <em>' + sales + '</em></span>');
+					sales_container.append('<a class="ext__sales" href="' + SkroutzScraper.config.skuReviewsURL + sku +'" target="_blank">πωλήσεις: <em>' + sales + '</em></a>');
 			}
 		},
 	 
@@ -136,7 +145,18 @@ $(() => {
 					cb( window.localStorage.getItem(key) );
 				}
 			}
-		}
+		},
+
+		throttle(callback, delay) {
+			if (SkroutzScraper.throttlingTimer)
+				return;
+
+			SkroutzScraper.throttlingTimer = setTimeout(() => {
+				callback();
+
+				SkroutzScraper.throttlingTimer = undefined;
+			}, delay);
+        }
 	};
  
 	SkroutzScraper.init();
